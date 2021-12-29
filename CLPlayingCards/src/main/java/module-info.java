@@ -7,5 +7,5 @@ module playingcards {
 	exports net.sf.cotelab.playingcards.demo;
 	exports net.sf.cotelab.playingcards.javafx;
 	
-	requires javafx.graphics;
+	requires transitive javafx.graphics;
 }
