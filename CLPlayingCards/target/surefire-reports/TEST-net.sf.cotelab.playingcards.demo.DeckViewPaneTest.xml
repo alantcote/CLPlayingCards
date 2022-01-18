@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="11" failures="0" name="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" time="0.316" errors="0" skipped="0">
+<testsuite tests="11" failures="0" name="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" time="0.25" errors="0" skipped="0">
   <properties>
     <property name="prism.order" value="sw"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -26,7 +26,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="user.variant" value=""/>
     <property name="os.name" value="Windows 10"/>
-    <property name="classworlds.conf" value="D:\alant\Projects\Cote\eclipse-2021-workspace\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf4962180236274523820.tmp"/>
+    <property name="classworlds.conf" value="D:\alant\Projects\Cote\eclipse-2021-workspace\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf13619527208617946454.tmp"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk-17.0.1\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\CollabNet\Subversion Client;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Gpg4win\..\GnuPG\bin;C:\Program Files\Git\cmd;C:\Users\TEST\AppData\Local\Microsoft\WindowsApps;;."/>
     <property name="jdk.debug" value="release"/>
@@ -60,15 +60,15 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testAddKids" time="0.291"/>
-  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testInizLayoutParams" time="0.014"/>
-  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testApplyHgap" time="0.003"/>
-  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testApplyVgap" time="0.001"/>
+  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testAddKids" time="0.227"/>
+  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testInizLayoutParams" time="0.011"/>
+  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testApplyHgap" time="0.002"/>
+  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testApplyVgap" time="0.002"/>
   <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testDeckViewPane" time="0.003"/>
   <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testNewInsets" time="0"/>
-  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testApplyPadding" time="0.002"/>
-  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testNewCardViewFactory" time="0"/>
+  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testApplyPadding" time="0.001"/>
+  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testNewCardViewFactory" time="0.001"/>
   <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testNewCard" time="0"/>
-  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testNewDeck" time="0"/>
+  <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testNewDeck" time="0.001"/>
   <testcase classname="net.sf.cotelab.playingcards.demo.DeckViewPaneTest" name="testApplyPrefColumns" time="0.002"/>
 </testsuite>
