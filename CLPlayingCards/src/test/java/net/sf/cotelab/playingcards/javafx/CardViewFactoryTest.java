@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import cotelab.jfxrunner.JavaFxJUnit4ClassRunner;
+import io.github.alantcote.jfxrunner.JavaFxJUnit4ClassRunner;
 import javafx.geometry.Dimension2D;
 import javafx.scene.image.Image;
 import net.sf.cotelab.playingcards.Card;
