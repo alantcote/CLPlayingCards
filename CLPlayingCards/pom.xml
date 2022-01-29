@@ -28,7 +28,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<javafx.classifier>win</javafx.classifier>
-		<javafx.main.class>net.sf.cotelab.playingcards.demo.DeckViewer</javafx.main.class>
+		<javafx.main.class>io.github.alantcote.playingcards.demo.DeckViewer</javafx.main.class>
 		<openjfx.version>18-ea+8</openjfx.version>
 	</properties>
 

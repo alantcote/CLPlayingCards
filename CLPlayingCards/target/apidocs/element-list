@@ -1,5 +1,5 @@
 module:playingcards
-net.sf.cotelab.playingcards
-net.sf.cotelab.playingcards.decks
-net.sf.cotelab.playingcards.demo
-net.sf.cotelab.playingcards.javafx
+io.github.alantcote.playingcards
+io.github.alantcote.playingcards.decks
+io.github.alantcote.playingcards.demo
+io.github.alantcote.playingcards.javafx

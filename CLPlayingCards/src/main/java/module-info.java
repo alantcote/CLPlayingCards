@@ -2,10 +2,10 @@
  * @author alantcote
  */
 module playingcards {
-	exports net.sf.cotelab.playingcards;
-	exports net.sf.cotelab.playingcards.decks;
-	exports net.sf.cotelab.playingcards.demo;
-	exports net.sf.cotelab.playingcards.javafx;
+	exports io.github.alantcote.playingcards;
+	exports io.github.alantcote.playingcards.decks;
+	exports io.github.alantcote.playingcards.demo;
+	exports io.github.alantcote.playingcards.javafx;
 	
 	requires transitive javafx.graphics;
 }
