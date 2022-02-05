@@ -16,9 +16,6 @@ import io.github.alantcote.jfxrunner.JavaFxJUnit4ClassRunner;
 import io.github.alantcote.playingcards.Card;
 import io.github.alantcote.playingcards.Rank;
 import io.github.alantcote.playingcards.Suit;
-import io.github.alantcote.playingcards.javafx.CardView;
-import io.github.alantcote.playingcards.javafx.CardViewFactory;
-import io.github.alantcote.playingcards.javafx.ImageFactory;
 import javafx.geometry.Dimension2D;
 import javafx.scene.image.Image;
 

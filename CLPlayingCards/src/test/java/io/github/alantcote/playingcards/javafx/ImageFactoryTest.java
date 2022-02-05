@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import io.github.alantcote.jfxrunner.JavaFxJUnit4ClassRunner;
-import io.github.alantcote.playingcards.javafx.ImageFactory;
 import javafx.scene.image.Image;
 
 @RunWith(JavaFxJUnit4ClassRunner.class)

@@ -9,11 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.github.alantcote.playingcards.Card;
-import io.github.alantcote.playingcards.Deck;
-import io.github.alantcote.playingcards.Rank;
-import io.github.alantcote.playingcards.Suit;
-
 public class DeckTest {
 	protected Deck fixture;
 	protected Rank[] ranks = {

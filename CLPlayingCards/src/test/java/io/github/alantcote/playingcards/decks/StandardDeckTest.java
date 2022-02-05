@@ -17,7 +17,6 @@ import io.github.alantcote.playingcards.Card;
 import io.github.alantcote.playingcards.Deck;
 import io.github.alantcote.playingcards.Rank;
 import io.github.alantcote.playingcards.Suit;
-import io.github.alantcote.playingcards.decks.StandardDeck;
 
 public class StandardDeckTest {
 	protected Mockery context;

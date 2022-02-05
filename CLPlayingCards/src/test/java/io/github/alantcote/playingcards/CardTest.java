@@ -4,10 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import io.github.alantcote.playingcards.Card;
-import io.github.alantcote.playingcards.Rank;
-import io.github.alantcote.playingcards.Suit;
-
 public class CardTest {
 	@Test
 	public void testCard() {

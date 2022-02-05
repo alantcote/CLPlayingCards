@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import io.github.alantcote.jfxrunner.JavaFxJUnit4ClassRunner;
-import io.github.alantcote.playingcards.demo.DeckViewer;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 

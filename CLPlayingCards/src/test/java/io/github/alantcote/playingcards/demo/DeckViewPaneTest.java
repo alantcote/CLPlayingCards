@@ -19,7 +19,6 @@ import io.github.alantcote.playingcards.Card;
 import io.github.alantcote.playingcards.Deck;
 import io.github.alantcote.playingcards.Rank;
 import io.github.alantcote.playingcards.Suit;
-import io.github.alantcote.playingcards.demo.DeckViewPane;
 import io.github.alantcote.playingcards.javafx.CardView;
 import io.github.alantcote.playingcards.javafx.CardViewFactory;
 import javafx.collections.ObservableList;
