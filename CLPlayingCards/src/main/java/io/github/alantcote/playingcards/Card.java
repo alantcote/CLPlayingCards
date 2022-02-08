@@ -9,7 +9,14 @@ import java.io.Serializable;
 public class Card implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * This card's rank.
+	 */
 	protected final Rank rank;
+	
+	/**
+	 * This card's suit.
+	 */
 	protected final Suit suit;
 	
 	/**

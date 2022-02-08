@@ -17,11 +17,29 @@ import javafx.scene.layout.TilePane;
  * @author cote
  */
 public class DeckViewPane extends TilePane {
+	/**
+	 * The number of columns in the display.
+	 */
 	public static final int DEFAULT_COLUMNS = 13;
+	
+	/**
+	 * Horizontal space between cards.
+	 */
 	public static final double DEFAULT_HGAP = 5;
+	
+	/**
+	 * Amount of space around the edges of the pane.
+	 */
 	public static final double DEFAULT_INSET = 5;
+	
+	/**
+	 * Vertical space between cards.
+	 */
 	public static final double DEFAULT_VGAP = 5;
 	
+	/**
+	 * The card view factory to be used.
+	 */
 	protected CardViewFactory cardViewFactory = newCardViewFactory();
 
 	/**
@@ -35,6 +53,9 @@ public class DeckViewPane extends TilePane {
 		addKids();
 	}
 
+	/**
+	 * Add the card images to the display.
+	 */
 	protected void addKids() {
 		Deck deck = newDeck();
 		ObservableList<Node> kids = getKids();
@@ -91,9 +112,9 @@ public class DeckViewPane extends TilePane {
 		setVgap(value);
 	}
 	
-	/*
-	 * This method provides a way to mock our class' access to the list, without
-	 * changing behavior for our superclass.
+	/**
+	 * Get the card images being displayed.
+	 * @return a list of the images.
 	 */
 	protected ObservableList<Node> getKids() {
 		return getChildren();

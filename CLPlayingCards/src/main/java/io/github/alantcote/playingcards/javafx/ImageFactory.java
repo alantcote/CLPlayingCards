@@ -10,9 +10,19 @@ import javafx.scene.image.Image;
  * <code>Image</code> objects, for performance reasons.
  */
 public class ImageFactory {
+	/**
+	 * Default maximum card image dimension.
+	 */
 	public static final double DEFAULT_MAX_DIM = 100;
 
+	/**
+	 * The cache for card images.
+	 */
 	protected Map<String, Image> cache;
+	
+	/**
+	 * The maximum dimension of card images.
+	 */
 	protected double maxDim;
 
 	/**

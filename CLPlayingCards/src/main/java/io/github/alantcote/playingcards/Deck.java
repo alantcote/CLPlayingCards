@@ -11,7 +11,14 @@ import java.util.Collections;
  * construction, generally by multiple invocations of the <code>add()</code> method.
  */
 public class Deck {
+	/**
+	 * The cards in this deck.
+	 */
 	protected ArrayList<Card> master = new ArrayList<>();
+	
+	/**
+	 * Temporary storage for cards.
+	 */
 	protected ArrayList<Card> slave = new ArrayList<>();
 
 	/**

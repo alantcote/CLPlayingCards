@@ -11,6 +11,9 @@ import javafx.stage.Stage;
  * @author cote
  */
 public class DeckViewer extends Application {
+	/**
+	 * Background color for the table on which cards are displayed.
+	 */
 	public static final Paint BACKGROUND_COLOR = Color.DARKGREEN;
 	
 	/**

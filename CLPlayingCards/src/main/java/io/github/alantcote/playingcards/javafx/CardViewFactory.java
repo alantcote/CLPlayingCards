@@ -14,11 +14,29 @@ import javafx.scene.image.Image;
  * image scaling.
  */
 public class CardViewFactory {
+	/**
+	 * The maximum dimension of a card image.
+	 */
 	public static final double DEFAULT_MAX_DIM = ImageFactory.DEFAULT_MAX_DIM;
+	
+	/**
+	 * Resource name for the card back image.
+	 */
 	public static final String RSRC_BACK_IMAGE = "b.gif";
+	
+	/**
+	 * Resource name suffix for card front images.
+	 */
 	public static final String RSRC_IMAGE_EXT = ".gif";
 	
+	/**
+	 * Dimensions of a card image.
+	 */
 	protected Dimension2D dimensions;
+	
+	/**
+	 * A factory for images.
+	 */
 	protected ImageFactory imageFactory;
 
 	/**

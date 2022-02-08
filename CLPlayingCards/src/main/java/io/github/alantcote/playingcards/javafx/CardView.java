@@ -8,6 +8,9 @@ import javafx.scene.image.ImageView;
  * An <code>ImageView</code> used for painting playing card images.
  */
 public class CardView extends ImageView {
+	/**
+	 * The card this object represents.
+	 */
 	protected Card card;
 	
 	/**
