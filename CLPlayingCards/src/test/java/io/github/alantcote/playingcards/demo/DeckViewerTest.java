@@ -1,95 +1,120 @@
+/**
+ * 
+ */
 package io.github.alantcote.playingcards.demo;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.Sequence;
-import org.jmock.imposters.ByteBuddyClassImposteriser;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import io.github.alantcote.jfxrunner.JavaFxJUnit4ClassRunner;
+import de.saxsys.mvvmfx.testingutils.jfxrunner.JfxRunner;
+import de.saxsys.mvvmfx.testingutils.jfxrunner.TestInJfxThread;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-@RunWith(JavaFxJUnit4ClassRunner.class)
+/**
+ * Test case for {@link io.github.alantcote.playingcards.demo.DeckViewer}.
+ */
+@RunWith(JfxRunner.class)
 public class DeckViewerTest {
-	protected Mockery context;
-	protected Sequence sequence;
-	
-	@Before
-	public void runBeforeTests() throws Exception {
-		context = new Mockery() {{
-			setThreadingPolicy( new Synchroniser());
-			setImposteriser( ByteBuddyClassImposteriser.INSTANCE );
-		}};
-		
-		sequence = context.sequence( getClass().getName());
-	}
-	
-	@After
-	public void runAfterTests() throws Exception {
-		context.assertIsSatisfied();
-	}
-	
+
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewer#main(java.lang.String[])}.
+	 */
 	@Test
 	public void testMain() {
-		// Identical to most main()s in JavaFX applications, this needs no test
-		assertTrue(true);
+		// Pretty much the standard JavaFX main(). No need to test.
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewer#newScene()}.
+	 */
 	@Test
 	public void testNewScene() {
-		// Thin candy shell around calling a constructor needs no test.
-		assertTrue(true);
+		DeckViewer fixture = new DeckViewer();
+
+		assertNotNull(fixture.newScene());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewer#setScene(javafx.stage.Stage, javafx.scene.Scene)}.
+	 */
 	@Test
+	@TestInJfxThread
+	public void testSetScene() {
+		Stage testStage = new Stage();
+		SimpleObjectProperty<Scene> sceneProperty = new SimpleObjectProperty<Scene>();
+		DeckViewer fixture = new DeckViewer();
+
+		fixture.setScene(testStage, sceneProperty.get());
+
+		assertTrue(sceneProperty.get() == testStage.getScene());
+	}
+
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewer#show(javafx.stage.Stage)}.
+	 */
+	@Test
+	public void testShow() {
+		// Testing the show() method would open a window. Not acceptable.
+	}
+
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewer#start(javafx.stage.Stage)}.
+	 */
+	@Test
+	@TestInJfxThread
 	public void testStartStage() {
-		final DeckViewer mockDeckViewer =
-				context.mock(DeckViewer.class, "mockDeckViewer");
-		final Scene mockScene = context.mock(Scene.class, "mockScene");
-		final Stage mockStage = context.mock(Stage.class, "mockStage");
-		
-		context.checking( new Expectations() {{
-			oneOf(mockDeckViewer).newScene();
-			will(returnValue(mockScene));
-			
-			oneOf(mockDeckViewer).setScene(mockStage, mockScene);
-			
-			oneOf(mockDeckViewer).show(mockStage);
-		}});
-		
+		SimpleIntegerProperty stateProperty = new SimpleIntegerProperty(0);
+		Stage testStage = new Stage();
+		SimpleObjectProperty<Scene> sceneProperty = new SimpleObjectProperty<Scene>();
 		DeckViewer fixture = new DeckViewer() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewer#newScene()
-			 */
+
 			@Override
 			protected Scene newScene() {
-				return mockDeckViewer.newScene();
+				assertTrue(0 == stateProperty.get());
+
+				sceneProperty.set(super.newScene());
+
+				stateProperty.set(1);
+
+				return sceneProperty.get();
 			}
 
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewer#setScene(javafx.stage.Stage, javafx.scene.Scene)
-			 */
 			@Override
 			protected void setScene(Stage stage, Scene scene) {
-				mockDeckViewer.setScene(stage, scene);
+				assertTrue(1 == stateProperty.get());
+
+				assertTrue(testStage == stage);
+				assertTrue(sceneProperty.get() == scene);
+
+				stateProperty.set(2);
 			}
 
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewer#show(javafx.stage.Stage)
-			 */
 			@Override
 			protected void show(Stage stage) {
-				mockDeckViewer.show(stage);
+				assertTrue(2 == stateProperty.get());
+
+				assertTrue(testStage == stage);
+
+				stateProperty.set(3);
 			}
+
 		};
-		
-		fixture.start(mockStage);
+
+		stateProperty.set(0);
+
+		fixture.start(testStage);
+
+		assertTrue(3 == stateProperty.get());
 	}
+
 }

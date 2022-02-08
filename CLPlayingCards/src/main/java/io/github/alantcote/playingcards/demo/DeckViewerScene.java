@@ -5,7 +5,6 @@ import javafx.scene.paint.Paint;
 
 /**
  * The scene for the deck viewer.
- * @author cote
  */
 public class DeckViewerScene extends Scene {
 	/**

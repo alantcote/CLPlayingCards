@@ -6,5 +6,8 @@
   <tagletArtifacts>
     <tagletArtifact />
   </tagletArtifacts>
+  <links>
+    <link>https://openjfx.io/javadoc/17/</link>
+  </links>
   <javadocResourcesDirectory>src/main/javadoc</javadocResourcesDirectory>
 </javadocOptions>

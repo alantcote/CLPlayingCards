@@ -1,499 +1,230 @@
 package io.github.alantcote.playingcards.demo;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.Sequence;
-import org.jmock.imposters.ByteBuddyClassImposteriser;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import io.github.alantcote.jfxrunner.JavaFxJUnit4ClassRunner;
+import de.saxsys.mvvmfx.testingutils.jfxrunner.JfxRunner;
+import de.saxsys.mvvmfx.testingutils.jfxrunner.TestInJfxThread;
 import io.github.alantcote.playingcards.Card;
 import io.github.alantcote.playingcards.Deck;
 import io.github.alantcote.playingcards.Rank;
 import io.github.alantcote.playingcards.Suit;
-import io.github.alantcote.playingcards.javafx.CardView;
-import io.github.alantcote.playingcards.javafx.CardViewFactory;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 
-@RunWith(JavaFxJUnit4ClassRunner.class)
+/**
+ * Test case for {@link io.github.alantcote.playingcards.demo.DeckViewPane}.
+ */
+@RunWith(JfxRunner.class)
 public class DeckViewPaneTest {
-	protected Mockery context;
-	protected Sequence sequence;
-	
-	@Before
-	public void runBeforeTests() throws Exception {
-		context = new Mockery() {{
-			setThreadingPolicy( new Synchroniser());
-			setImposteriser( ByteBuddyClassImposteriser.INSTANCE );
-		}};
-		
-		sequence = context.sequence( getClass().getName());
-	}
-	
-	@After
-	public void runAfterTests() throws Exception {
-		context.assertIsSatisfied();
-	}
-	
+
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#addKids()}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testAddKids() {
-		final DeckViewPane mockDeckViewPane =
-				context.mock(DeckViewPane.class, "mockDeckViewPane");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		final Deck mockDeck = context.mock(Deck.class, "mockDeck");
-		@SuppressWarnings("unchecked")
-		final ObservableList<Node> mockObservableList = (ObservableList<Node>)
-				context.mock(ObservableList.class, "mockObservableList");
-		final Card mockCard = context.mock(Card.class, "mockCard");
-		final CardView mockBackView =
-				context.mock(CardView.class, "mockBackView");
-		final CardView mockCardView =
-				context.mock(CardView.class, "mockCardView");
-		
-		context.checking( new Expectations() {{
-			oneOf(mockDeckViewPane).newCardViewFactory();
-			will(returnValue(mockCardViewFactory));
-
-			oneOf(mockDeckViewPane).inizLayoutParams();
-			
-			// following expectations are for the method under test, per se:
-
-			oneOf(mockDeckViewPane).newDeck();
-			will(returnValue(mockDeck));
-
-			oneOf(mockDeckViewPane).getKids();
-			will(returnValue(mockObservableList));
-
-			oneOf(mockDeckViewPane).newCard(Rank.JOKER_HIGH, Suit.JOKER);
-			will(returnValue(mockCard));
-			
-			oneOf(mockCardViewFactory).getBackView(mockCard);
-			will(returnValue(mockBackView));
-			
-			oneOf(mockDeck).isEmpty();
-			will(returnValue(false));
-			
-			oneOf(mockDeck).deal();
-			will(returnValue(mockCard));
-			
-			oneOf(mockCardViewFactory).getFrontView(mockCard);
-			will(returnValue(mockCardView));
-			
-			oneOf(mockObservableList).add(mockCardView);
-			will(returnValue(true));
-			
-			oneOf(mockDeck).isEmpty();
-			will(returnValue(true));
-			
-			oneOf(mockObservableList).add(mockBackView);
-			will(returnValue(true));
-		}});
-		
+		SimpleIntegerProperty stateProperty = new SimpleIntegerProperty(0);
 		DeckViewPane fixture = new DeckViewPane() {
-			/* (non-Javadoc)
-			 * @see javafx.scene.layout.Pane#getChildren()
-			 */
+
 			@Override
-			public ObservableList<Node> getKids() {
-				return mockDeckViewPane.getKids();
+			protected ObservableList<Node> getKids() {
+				assertTrue(1 == stateProperty.get());
+
+				stateProperty.set(2);
+
+				return super.getKids();
 			}
 
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#inizLayoutParams()
-			 */
-			@Override
-			protected void inizLayoutParams() {
-				mockDeckViewPane.inizLayoutParams();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newCard(io.github.alantcote.playingcards.Rank, io.github.alantcote.playingcards.Suit)
-			 */
-			@Override
-			protected Card newCard(Rank rank, Suit suit) {
-				return mockDeckViewPane.newCard(rank, suit);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newCardViewFactory()
-			 */
-			@Override
-			protected CardViewFactory newCardViewFactory() {
-				return mockDeckViewPane.newCardViewFactory();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newDeck()
-			 */
 			@Override
 			protected Deck newDeck() {
-				return mockDeckViewPane.newDeck();
+				assertTrue(0 == stateProperty.get());
+
+				stateProperty.set(1);
+
+				return super.newDeck();
 			}
+
 		};
-		
-		assertNotNull(fixture);
+
+		stateProperty.set(0);
+
+		fixture.addKids();
+
+		assertTrue(2 == stateProperty.get());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#applyHgap(double)}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testApplyHgap() {
-		final DeckViewPane mockDeckViewPane =
-				context.mock(DeckViewPane.class, "mockDeckViewPane");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		
-		context.checking( new Expectations() {{
-			oneOf(mockDeckViewPane).newCardViewFactory();
-			will(returnValue(mockCardViewFactory));
+		DeckViewPane fixture = new DeckViewPane();
 
-			oneOf(mockDeckViewPane).inizLayoutParams();
-
-			oneOf(mockDeckViewPane).addKids();
-		}});
-		
-		DeckViewPane fixture = new DeckViewPane() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#addKids()
-			 */
-			@Override
-			protected void addKids() {
-				mockDeckViewPane.addKids();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#inizLayoutParams()
-			 */
-			@Override
-			protected void inizLayoutParams() {
-				mockDeckViewPane.inizLayoutParams();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newCardViewFactory()
-			 */
-			@Override
-			protected CardViewFactory newCardViewFactory() {
-				return mockDeckViewPane.newCardViewFactory();
-			}
-		};
-		
 		fixture.applyHgap(DeckViewPane.DEFAULT_HGAP);
-		
-		assertEquals(
-				DeckViewPane.DEFAULT_HGAP, fixture.getHgap(), Double.MIN_VALUE);
+
+		assertTrue(DeckViewPane.DEFAULT_HGAP == fixture.getHgap());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#applyPadding(javafx.geometry.Insets)}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testApplyPadding() {
-		final DeckViewPane mockDeckViewPane =
-				context.mock(DeckViewPane.class, "mockDeckViewPane");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		final Insets mockInsets = context.mock(Insets.class, "mockInsets");
-		
-		context.checking( new Expectations() {{
-			oneOf(mockDeckViewPane).newCardViewFactory();
-			will(returnValue(mockCardViewFactory));
+		Insets testInsets = new Insets(DeckViewPane.DEFAULT_INSET);
+		DeckViewPane fixture = new DeckViewPane();
 
-			oneOf(mockDeckViewPane).inizLayoutParams();
+		fixture.applyPadding(testInsets);
 
-			oneOf(mockDeckViewPane).addKids();
-		}});
-		
-		DeckViewPane fixture = new DeckViewPane() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#addKids()
-			 */
-			@Override
-			protected void addKids() {
-				mockDeckViewPane.addKids();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#inizLayoutParams()
-			 */
-			@Override
-			protected void inizLayoutParams() {
-				mockDeckViewPane.inizLayoutParams();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newCardViewFactory()
-			 */
-			@Override
-			protected CardViewFactory newCardViewFactory() {
-				return mockDeckViewPane.newCardViewFactory();
-			}
-		};
-		
-		fixture.applyPadding(mockInsets);
-		
-		assertEquals(mockInsets, fixture.getPadding());
+		assertTrue(testInsets == fixture.getPadding());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#applyPrefColumns(int)}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testApplyPrefColumns() {
-		final DeckViewPane mockDeckViewPane =
-				context.mock(DeckViewPane.class, "mockDeckViewPane");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		
-		context.checking( new Expectations() {{
-			oneOf(mockDeckViewPane).newCardViewFactory();
-			will(returnValue(mockCardViewFactory));
+		DeckViewPane fixture = new DeckViewPane();
 
-			oneOf(mockDeckViewPane).inizLayoutParams();
-
-			oneOf(mockDeckViewPane).addKids();
-		}});
-		
-		DeckViewPane fixture = new DeckViewPane() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#addKids()
-			 */
-			@Override
-			protected void addKids() {
-				mockDeckViewPane.addKids();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#inizLayoutParams()
-			 */
-			@Override
-			protected void inizLayoutParams() {
-				mockDeckViewPane.inizLayoutParams();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newCardViewFactory()
-			 */
-			@Override
-			protected CardViewFactory newCardViewFactory() {
-				return mockDeckViewPane.newCardViewFactory();
-			}
-		};
-		
 		fixture.applyPrefColumns(DeckViewPane.DEFAULT_COLUMNS);
-		
-		assertEquals(DeckViewPane.DEFAULT_COLUMNS, fixture.getPrefColumns());
+
+		assertTrue(DeckViewPane.DEFAULT_COLUMNS == fixture.getPrefColumns());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#applyVgap(double)}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testApplyVgap() {
-		final DeckViewPane mockDeckViewPane =
-				context.mock(DeckViewPane.class, "mockDeckViewPane");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		
-		context.checking( new Expectations() {{
-			oneOf(mockDeckViewPane).newCardViewFactory();
-			will(returnValue(mockCardViewFactory));
+		DeckViewPane fixture = new DeckViewPane();
 
-			oneOf(mockDeckViewPane).inizLayoutParams();
-
-			oneOf(mockDeckViewPane).addKids();
-		}});
-		
-		DeckViewPane fixture = new DeckViewPane() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#addKids()
-			 */
-			@Override
-			protected void addKids() {
-				mockDeckViewPane.addKids();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#inizLayoutParams()
-			 */
-			@Override
-			protected void inizLayoutParams() {
-				mockDeckViewPane.inizLayoutParams();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newCardViewFactory()
-			 */
-			@Override
-			protected CardViewFactory newCardViewFactory() {
-				return mockDeckViewPane.newCardViewFactory();
-			}
-		};
-		
 		fixture.applyVgap(DeckViewPane.DEFAULT_VGAP);
-		
-		assertEquals(
-				DeckViewPane.DEFAULT_VGAP, fixture.getVgap(), Double.MIN_VALUE);
+
+		assertTrue(DeckViewPane.DEFAULT_VGAP == fixture.getVgap());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#DeckViewPane()}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testDeckViewPane() {
-		final DeckViewPane mockDeckViewPane =
-				context.mock(DeckViewPane.class, "mockDeckViewPane");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		
-		context.checking( new Expectations() {{
-			oneOf(mockDeckViewPane).newCardViewFactory();
-			will(returnValue(mockCardViewFactory));
-
-			oneOf(mockDeckViewPane).inizLayoutParams();
-
-			oneOf(mockDeckViewPane).addKids();
-		}});
-		
+		SimpleIntegerProperty stateProperty = new SimpleIntegerProperty(0);
 		DeckViewPane fixture = new DeckViewPane() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#addKids()
-			 */
+
 			@Override
 			protected void addKids() {
-				mockDeckViewPane.addKids();
+				assertTrue(1 == stateProperty.get());
+
+				stateProperty.set(2);
 			}
 
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#inizLayoutParams()
-			 */
 			@Override
 			protected void inizLayoutParams() {
-				mockDeckViewPane.inizLayoutParams();
+				assertTrue(0 == stateProperty.get());
+
+				stateProperty.set(1);
 			}
 
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newCardViewFactory()
-			 */
-			@Override
-			protected CardViewFactory newCardViewFactory() {
-				return mockDeckViewPane.newCardViewFactory();
-			}
 		};
-		
+
 		assertNotNull(fixture);
+		assertTrue(2 == stateProperty.get());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#getKids()}.
+	 */
 	@Test
+	@TestInJfxThread
+	public void testGetKids() {
+		DeckViewPane fixture = new DeckViewPane();
+
+		ObservableList<Node> kids = fixture.getKids();
+
+		assertTrue(kids == fixture.getChildren());
+	}
+
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#inizLayoutParams()}.
+	 */
+	@Test
+	@TestInJfxThread
 	public void testInizLayoutParams() {
-		final DeckViewPane mockDeckViewPane =
-				context.mock(DeckViewPane.class, "mockDeckViewPane");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		final Insets mockInsets = context.mock(Insets.class, "mockInsets");
-		
-		context.checking( new Expectations() {{
-			oneOf(mockDeckViewPane).newCardViewFactory();
-			will(returnValue(mockCardViewFactory));
-			
-			// begin method under test, per se.
+		DeckViewPane fixture = new DeckViewPane();
 
-			oneOf(mockDeckViewPane).applyHgap(DeckViewPane.DEFAULT_HGAP);
+		fixture.inizLayoutParams();
 
-			oneOf(mockDeckViewPane).newInsets(DeckViewPane.DEFAULT_INSET);
-			will(returnValue(mockInsets));
-
-			oneOf(mockDeckViewPane).applyPadding(mockInsets);
-
-			oneOf(mockDeckViewPane).applyPrefColumns(
-					DeckViewPane.DEFAULT_COLUMNS);
-
-			oneOf(mockDeckViewPane).applyVgap(DeckViewPane.DEFAULT_VGAP);
-			
-			// end method under test, per se.
-
-			oneOf(mockDeckViewPane).addKids();
-		}});
-		
-		DeckViewPane fixture = new DeckViewPane() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#addKids()
-			 */
-			@Override
-			protected void addKids() {
-				mockDeckViewPane.addKids();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#applyHgap(double)
-			 */
-			@Override
-			protected void applyHgap(double value) {
-				mockDeckViewPane.applyHgap(value);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#applyPadding(javafx.geometry.Insets)
-			 */
-			@Override
-			protected void applyPadding(Insets value) {
-				mockDeckViewPane.applyPadding(value);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#applyPrefColumns(int)
-			 */
-			@Override
-			protected void applyPrefColumns(int value) {
-				mockDeckViewPane.applyPrefColumns(value);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#applyVgap(double)
-			 */
-			@Override
-			protected void applyVgap(double value) {
-				mockDeckViewPane.applyVgap(value);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newCardViewFactory()
-			 */
-			@Override
-			protected CardViewFactory newCardViewFactory() {
-				return mockDeckViewPane.newCardViewFactory();
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.demo.DeckViewPane#newInsets(double)
-			 */
-			@Override
-			protected Insets newInsets(double topRightBottomLeft) {
-				return mockDeckViewPane.newInsets(topRightBottomLeft);
-			}
-		};
-		
-		assertNotNull(fixture);
+		assertTrue(DeckViewPane.DEFAULT_HGAP == fixture.getHgap());
+		assertTrue(DeckViewPane.DEFAULT_COLUMNS == fixture.getPrefColumns());
+		assertTrue(DeckViewPane.DEFAULT_VGAP == fixture.getVgap());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#newCard(io.github.alantcote.playingcards.Rank, io.github.alantcote.playingcards.Suit)}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testNewCard() {
-		// Thin candy shell around calling a constructor needs no test.
-		assertTrue(true);
+		DeckViewPane fixture = new DeckViewPane();
+
+		Card testCard = fixture.newCard(Rank.ACE, Suit.CLUB);
+
+		assertTrue(Rank.ACE == testCard.getRank());
+		assertTrue(Suit.CLUB == testCard.getSuit());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#newCardViewFactory()}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testNewCardViewFactory() {
-		// Thin candy shell around calling a constructor needs no test.
-		assertTrue(true);
+		DeckViewPane fixture = new DeckViewPane();
+
+		assertNotNull(fixture.newCardViewFactory());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#newDeck()}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testNewDeck() {
-		// Thin candy shell around calling a constructor needs no test.
-		assertTrue(true);
+		DeckViewPane fixture = new DeckViewPane();
+
+		assertNotNull(fixture.newDeck());
 	}
 
+	/**
+	 * Test method for
+	 * {@link io.github.alantcote.playingcards.demo.DeckViewPane#newInsets(double)}.
+	 */
 	@Test
+	@TestInJfxThread
 	public void testNewInsets() {
-		// Thin candy shell around calling a constructor needs no test.
-		assertTrue(true);
+		DeckViewPane fixture = new DeckViewPane();
+
+		assertNotNull(fixture.newInsets(DeckViewPane.DEFAULT_INSET));
 	}
+
 }

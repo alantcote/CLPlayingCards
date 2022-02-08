@@ -27,19 +27,17 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<javafx.classifier>win</javafx.classifier>
-		<javafx.main.class>io.github.alantcote.playingcards.demo.DeckViewer</javafx.main.class>
-		<openjfx.version>18-ea+8</openjfx.version>
+		<openjfx.version>18-ea+10</openjfx.version>
 	</properties>
 
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<url>https://s01.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<url>https://s01.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
 
@@ -59,7 +57,7 @@
 
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/alantcote/issues</url>
+		<url>https://github.com/alantcote/CLPlayingCards/issues</url>
 	</issueManagement>
 
 	<repositories>
@@ -110,6 +108,12 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
@@ -122,15 +126,43 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>tree</id>
+						<phase>package</phase>
+						<goals>
+							<goal>analyze</goal>
+							<goal>tree</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
-				<groupId>org.openjfx</groupId>
-				<artifactId>javafx-maven-plugin</artifactId>
-				<version>0.0.8</version>
-				<configuration>
-					<mainClass>${javafx.main.class}</mainClass>
-				</configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>3.0.0-M1</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.8.1</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
@@ -150,8 +182,25 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>3.0.0-M1</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.3.1</version>
+				<configuration>
+					<links>
+						<link>https://openjfx.io/javadoc/17/</link>
+					</links>
+				</configuration>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -160,6 +209,18 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.2.0</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.10.0</version>
 			</plugin>
 
 			<plugin>
@@ -174,6 +235,12 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
 			</plugin>
 
 			<plugin>
@@ -219,37 +286,45 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>javafx4linux</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<properties>
+				<javafx.classifier>linux</javafx.classifier>
+			</properties>
+		</profile>
+		<profile>
+			<id>javafx4mac</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<javafx.classifier>mac</javafx.classifier>
+			</properties>
+		</profile>
+		<profile>
+			<id>javafx4win</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<os>
+					<family>windows</family>
+				</os>
+			</activation>
+			<properties>
+				<javafx.classifier>win</javafx.classifier>
+			</properties>
+		</profile>
 	</profiles>
 
 	<dependencies>
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy</artifactId>
-			<version>1.12.6</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-			<version>3.3.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>
-			<version>2.2</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
-			<version>2.2</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-base</artifactId>
@@ -266,25 +341,9 @@
 
 		<dependency>
 			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-fxml</artifactId>
-			<version>${openjfx.version}</version>
-			<classifier>${javafx.classifier}</classifier>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
 			<version>${openjfx.version}</version>
 			<classifier>${javafx.classifier}</classifier>
-		</dependency>
-
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-media</artifactId>
-			<version>${openjfx.version}</version>
-			<classifier>${javafx.classifier}</classifier>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -295,37 +354,16 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-web</artifactId>
-			<version>${openjfx.version}</version>
-			<classifier>${javafx.classifier}</classifier>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-imposters</artifactId>
-			<version>2.12.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-legacy</artifactId>
-			<version>2.12.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.alantcote</groupId>
-			<artifactId>junit4openjfx</artifactId>
-			<version>1.0.0</version>
+			<groupId>de.saxsys</groupId>
+			<artifactId>mvvmfx-testing-utils</artifactId>
+			<version>1.8.0</version>
 			<scope>test</scope>
 		</dependency>
 

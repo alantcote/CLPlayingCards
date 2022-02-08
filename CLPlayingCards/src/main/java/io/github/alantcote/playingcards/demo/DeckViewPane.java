@@ -65,8 +65,6 @@ public class DeckViewPane extends TilePane {
 
 	/**
 	 * Set the Padding value.
-	 * This method exists to wrap a call to a final (and thus, unmockable)
-	 * method, in support of unit testing.
 	 * @param value the value.
 	 */
 	protected void applyPadding(Insets value) {

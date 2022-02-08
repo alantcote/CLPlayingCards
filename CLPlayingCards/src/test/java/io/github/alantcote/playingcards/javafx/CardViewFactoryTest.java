@@ -1,856 +1,180 @@
 package io.github.alantcote.playingcards.javafx;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.Sequence;
-import org.jmock.imposters.ByteBuddyClassImposteriser;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import io.github.alantcote.jfxrunner.JavaFxJUnit4ClassRunner;
 import io.github.alantcote.playingcards.Card;
 import io.github.alantcote.playingcards.Rank;
 import io.github.alantcote.playingcards.Suit;
-import javafx.geometry.Dimension2D;
 import javafx.scene.image.Image;
 
-@RunWith(JavaFxJUnit4ClassRunner.class)
+/**
+ * Test case for {@link io.github.alantcote.playingcards.javafx.CardViewFactory}.
+ */
 public class CardViewFactoryTest {
-	protected Mockery context;
-	protected Sequence sequence;
-	
-	@Before
-	public void runBeforeTests() throws Exception {
-		context = new Mockery() {{
-			setThreadingPolicy( new Synchroniser());
-			setImposteriser( ByteBuddyClassImposteriser.INSTANCE );
-		}};
-		
-		sequence = context.sequence( getClass().getName());
-	}
-	
-	@After
-	public void runAfterTests() throws Exception {
-		context.assertIsSatisfied();
-	}
-	
+
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#CardViewFactory()}.
+	 */
 	@Test
 	public void testCardViewFactory() {
-		final double expectedMaxDim = CardViewFactory.DEFAULT_MAX_DIM;
-		final ImageFactory mockImageFactory =
-				context.mock(ImageFactory.class, "mockImageFactory");
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class, "mockImage");
-		final double width = 3;
-		final double height = 4;
-		final Dimension2D mockDimension2D =
-				context.mock(Dimension2D.class, "mockDimension2D");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
+		CardViewFactory fixture = new CardViewFactory();
 		
-		context.checking(new Expectations() {{
-			oneOf(mockCardViewFactory).newImageFactory(expectedMaxDim);
-			will(returnValue(mockImageFactory));
-
-			oneOf(mockCardViewFactory).getResource(
-					CardViewFactory.RSRC_BACK_IMAGE);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).getWidth(mockImage);
-			will(returnValue(width));
-			
-			oneOf(mockCardViewFactory).getHeight(mockImage);
-			will(returnValue(height));
-			
-			oneOf(mockCardViewFactory).newDimension2D(width, height);
-			will(returnValue(mockDimension2D));
-		}});
-		
-		CardViewFactory fixture = new CardViewFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getHeight(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getHeight(Image image) {
-				return mockCardViewFactory.getHeight(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getResource(java.lang.String)
-			 */
-			@Override
-			protected String getResource(String resourceName) {
-				return mockCardViewFactory.getResource(resourceName);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getWidth(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getWidth(Image image) {
-				return mockCardViewFactory.getWidth(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newDimension2D(double, double)
-			 */
-			@Override
-			protected Dimension2D newDimension2D(
-					double width, double height) {
-				return mockCardViewFactory.newDimension2D(width, height);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newImageFactory(double)
-			 */
-			@Override
-			protected ImageFactory newImageFactory(double maxDim) {
-				return mockCardViewFactory.newImageFactory(maxDim);
-			}
-		};
-		
-		assertEquals(mockImageFactory, fixture.imageFactory);
-		assertEquals(mockDimension2D, fixture.dimensions);
+		assertNotNull(fixture);
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#CardViewFactory(double)}.
+	 */
 	@Test
 	public void testCardViewFactoryDouble() {
-		final double expectedMaxDim = 1.234;
-		final ImageFactory mockImageFactory =
-				context.mock(ImageFactory.class, "mockImageFactory");
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class, "mockImage");
-		final double width = 3;
-		final double height = 4;
-		final Dimension2D mockDimension2D =
-				context.mock(Dimension2D.class, "mockDimension2D");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
+		CardViewFactory fixture = new CardViewFactory(CardViewFactory.DEFAULT_MAX_DIM);
 		
-		context.checking(new Expectations() {{
-			oneOf(mockCardViewFactory).newImageFactory(expectedMaxDim);
-			will(returnValue(mockImageFactory));
-
-			oneOf(mockCardViewFactory).getResource(
-					CardViewFactory.RSRC_BACK_IMAGE);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).getWidth(mockImage);
-			will(returnValue(width));
-			
-			oneOf(mockCardViewFactory).getHeight(mockImage);
-			will(returnValue(height));
-			
-			oneOf(mockCardViewFactory).newDimension2D(width, height);
-			will(returnValue(mockDimension2D));
-		}});
-		
-		CardViewFactory fixture = new CardViewFactory(expectedMaxDim) {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getHeight(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getHeight(Image image) {
-				return mockCardViewFactory.getHeight(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getResource(java.lang.String)
-			 */
-			@Override
-			protected String getResource(String resourceName) {
-				return mockCardViewFactory.getResource(resourceName);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getWidth(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getWidth(Image image) {
-				return mockCardViewFactory.getWidth(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newDimension2D(double, double)
-			 */
-			@Override
-			protected Dimension2D newDimension2D(
-					double width, double height) {
-				return mockCardViewFactory.newDimension2D(width, height);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newImageFactory(double)
-			 */
-			@Override
-			protected ImageFactory newImageFactory(double maxDim) {
-				return mockCardViewFactory.newImageFactory(maxDim);
-			}
-		};
-		
-		assertEquals(mockImageFactory, fixture.imageFactory);
-		assertEquals(mockDimension2D, fixture.dimensions);
+		assertNotNull(fixture);
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#getBackView(io.github.alantcote.playingcards.Card)}.
+	 */
 	@Test
 	public void testGetBackView() {
-		final double expectedMaxDim = CardViewFactory.DEFAULT_MAX_DIM;
-		final ImageFactory mockImageFactory =
-				context.mock(ImageFactory.class, "mockImageFactory");
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class, "mockImage");
-		final double width = 3;
-		final double height = 4;
-		final Dimension2D mockDimension2D =
-				context.mock(Dimension2D.class, "mockDimension2D");
-		final Card mockCard = context.mock(Card.class, "mockCard");
-		final CardView mockCardView =
-				context.mock(CardView.class, "mockCardView");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
+		CardViewFactory fixture = new CardViewFactory();
+		Card testCard = new Card(Rank.ACE, Suit.CLUB);
 		
-		context.checking(new Expectations() {{
-			/*
-			 * During construction . . .
-			 */
-			oneOf(mockCardViewFactory).newImageFactory(expectedMaxDim);
-			will(returnValue(mockImageFactory));
-
-			oneOf(mockCardViewFactory).getResource(
-					CardViewFactory.RSRC_BACK_IMAGE);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).getWidth(mockImage);
-			will(returnValue(width));
-			
-			oneOf(mockCardViewFactory).getHeight(mockImage);
-			will(returnValue(height));
-			
-			oneOf(mockCardViewFactory).newDimension2D(width, height);
-			will(returnValue(mockDimension2D));
-
-			/*
-			 * During call to method under test . . .
-			 */
-			oneOf(mockCardViewFactory).getResource(
-					CardViewFactory.RSRC_BACK_IMAGE);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).newCardView(mockCard, mockImage);
-			will (returnValue(mockCardView));
-		}});
-		
-		CardViewFactory fixture = new CardViewFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getHeight(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getHeight(Image image) {
-				return mockCardViewFactory.getHeight(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getResource(java.lang.String)
-			 */
-			@Override
-			protected String getResource(String resourceName) {
-				return mockCardViewFactory.getResource(resourceName);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getWidth(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getWidth(Image image) {
-				return mockCardViewFactory.getWidth(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newCardView(io.github.alantcote.playingcards.Card, javafx.scene.image.Image)
-			 */
-			@Override
-			protected CardView newCardView(Card card, Image image) {
-				return mockCardViewFactory.newCardView(card, image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newDimension2D(double, double)
-			 */
-			@Override
-			protected Dimension2D newDimension2D(
-					double width, double height) {
-				return mockCardViewFactory.newDimension2D(width, height);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newImageFactory(double)
-			 */
-			@Override
-			protected ImageFactory newImageFactory(double maxDim) {
-				return mockCardViewFactory.newImageFactory(maxDim);
-			}
-		};
-		
-		assertEquals(mockCardView, fixture.getBackView(mockCard));
+		assertNotNull(fixture.getBackView(testCard));
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#getDimensions()}.
+	 */
 	@Test
 	public void testGetDimensions() {
-		final double expectedMaxDim = CardViewFactory.DEFAULT_MAX_DIM;
-		final ImageFactory mockImageFactory =
-				context.mock(ImageFactory.class, "mockImageFactory");
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class, "mockImage");
-		final double width = 3;
-		final double height = 4;
-		final Dimension2D mockDimension2D =
-				context.mock(Dimension2D.class, "mockDimension2D");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
+		CardViewFactory fixture = new CardViewFactory();
 		
-		context.checking(new Expectations() {{
-			/*
-			 * During construction . . .
-			 */
-			oneOf(mockCardViewFactory).newImageFactory(expectedMaxDim);
-			will(returnValue(mockImageFactory));
-
-			oneOf(mockCardViewFactory).getResource(
-					CardViewFactory.RSRC_BACK_IMAGE);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).getWidth(mockImage);
-			will(returnValue(width));
-			
-			oneOf(mockCardViewFactory).getHeight(mockImage);
-			will(returnValue(height));
-			
-			oneOf(mockCardViewFactory).newDimension2D(width, height);
-			will(returnValue(mockDimension2D));
-
-			/*
-			 * During call to method under test . . .
-			 */
-		}});
-		
-		CardViewFactory fixture = new CardViewFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getHeight(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getHeight(Image image) {
-				return mockCardViewFactory.getHeight(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getResource(java.lang.String)
-			 */
-			@Override
-			protected String getResource(String resourceName) {
-				return mockCardViewFactory.getResource(resourceName);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getWidth(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getWidth(Image image) {
-				return mockCardViewFactory.getWidth(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newCardView(io.github.alantcote.playingcards.Card, javafx.scene.image.Image)
-			 */
-			@Override
-			protected CardView newCardView(Card card, Image image) {
-				return mockCardViewFactory.newCardView(card, image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newDimension2D(double, double)
-			 */
-			@Override
-			protected Dimension2D newDimension2D(
-					double width, double height) {
-				return mockCardViewFactory.newDimension2D(width, height);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newImageFactory(double)
-			 */
-			@Override
-			protected ImageFactory newImageFactory(double maxDim) {
-				return mockCardViewFactory.newImageFactory(maxDim);
-			}
-		};
-		
-		assertEquals(mockDimension2D, fixture.getDimensions());
+		assertNotNull(fixture.getDimensions());
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#getFrontView(io.github.alantcote.playingcards.Card)}.
+	 */
 	@Test
 	public void testGetFrontView() {
-		final double expectedMaxDim = CardViewFactory.DEFAULT_MAX_DIM;
-		final ImageFactory mockImageFactory =
-				context.mock(ImageFactory.class, "mockImageFactory");
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class, "mockImage");
-		final double width = 3;
-		final double height = 4;
-		final Dimension2D mockDimension2D =
-				context.mock(Dimension2D.class, "mockDimension2D");
-		final Card mockCard = context.mock(Card.class, "mockCard");
-		final CardView mockCardView =
-				context.mock(CardView.class, "mockCardView");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
+		CardViewFactory fixture = new CardViewFactory();
+		Card testCard = new Card(Rank.ACE, Suit.CLUB);
 		
-		context.checking(new Expectations() {{
-			/*
-			 * During construction . . .
-			 */
-			oneOf(mockCardViewFactory).newImageFactory(expectedMaxDim);
-			will(returnValue(mockImageFactory));
-
-			oneOf(mockCardViewFactory).getResource(
-					CardViewFactory.RSRC_BACK_IMAGE);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).getWidth(mockImage);
-			will(returnValue(width));
-			
-			oneOf(mockCardViewFactory).getHeight(mockImage);
-			will(returnValue(height));
-			
-			oneOf(mockCardViewFactory).newDimension2D(width, height);
-			will(returnValue(mockDimension2D));
-
-			/*
-			 * During call to method under test . . .
-			 */
-			oneOf(mockCardViewFactory).imageURL(mockCard);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).newCardView(mockCard, mockImage);
-			will (returnValue(mockCardView));
-		}});
-		
-		CardViewFactory fixture = new CardViewFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getHeight(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getHeight(Image image) {
-				return mockCardViewFactory.getHeight(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getResource(java.lang.String)
-			 */
-			@Override
-			protected String getResource(String resourceName) {
-				return mockCardViewFactory.getResource(resourceName);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getWidth(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getWidth(Image image) {
-				return mockCardViewFactory.getWidth(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#imageURL(io.github.alantcote.playingcards.Card)
-			 */
-			@Override
-			protected String imageURL(Card card) {
-				return mockCardViewFactory.imageURL(card);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newCardView(io.github.alantcote.playingcards.Card, javafx.scene.image.Image)
-			 */
-			@Override
-			protected CardView newCardView(Card card, Image image) {
-				return mockCardViewFactory.newCardView(card, image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newDimension2D(double, double)
-			 */
-			@Override
-			protected Dimension2D newDimension2D(
-					double width, double height) {
-				return mockCardViewFactory.newDimension2D(width, height);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newImageFactory(double)
-			 */
-			@Override
-			protected ImageFactory newImageFactory(double maxDim) {
-				return mockCardViewFactory.newImageFactory(maxDim);
-			}
-		};
-		
-		assertEquals(mockCardView, fixture.getFrontView(mockCard));
+		assertNotNull(fixture.getFrontView(testCard));
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#getHeight(javafx.scene.image.Image)}.
+	 */
+	@Test
+	public void testGetHeight() {
+		CardViewFactory fixture = new CardViewFactory();
+		Image testImage;
+		String url;
+		double width, height;
+		
+		url = fixture.getResource(CardViewFactory.RSRC_BACK_IMAGE);
+		testImage = fixture.imageFactory.getImage(url);
+		width = fixture.getWidth(testImage);
+		height = fixture.getHeight(testImage);
+		
+		assertTrue(0 < height);
+	}
+
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#getResource(java.lang.String)}.
+	 */
 	@Test
 	public void testGetResource() {
-		/*
-		 * This method is a wrapper around
-		 * getClass().getResource(resourceName).toExternalForm(). It is largely
-		 * comprised of standard idiom, and is omitted from testing.
-		 */
+		CardViewFactory fixture = new CardViewFactory();
+		
+		assertNotNull(fixture.getResource(CardViewFactory.RSRC_BACK_IMAGE));
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#getWidth(javafx.scene.image.Image)}.
+	 */
+	@Test
+	public void testGetWidth() {
+		CardViewFactory fixture = new CardViewFactory();
+		Image testImage;
+		String url;
+		double width, height;
+		
+		url = fixture.getResource(CardViewFactory.RSRC_BACK_IMAGE);
+		testImage = fixture.imageFactory.getImage(url);
+		width = fixture.getWidth(testImage);
+		height = fixture.getHeight(testImage);
+		
+		assertTrue(0 < width);
+	}
+
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#imageURL(io.github.alantcote.playingcards.Card)}.
+	 */
 	@Test
 	public void testImageURL() {
-		final double expectedMaxDim = CardViewFactory.DEFAULT_MAX_DIM;
-		final ImageFactory mockImageFactory =
-				context.mock(ImageFactory.class, "mockImageFactory");
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class, "mockImage");
-		final double width = 3;
-		final double height = 4;
-		final Dimension2D mockDimension2D =
-				context.mock(Dimension2D.class, "mockDimension2D");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		final Card mockCard = context.mock(Card.class, "mockCard");
-		final String rankString = "rankString";
-		final String suitString = "suitString";
-		final String resourceName =
-				rankString + suitString + CardViewFactory.RSRC_IMAGE_EXT;
+		CardViewFactory fixture = new CardViewFactory();
+		Card testCard = new Card(Rank.ACE, Suit.CLUB);
 		
-		context.checking(new Expectations() {{
-			/*
-			 * During fixture construction . . .
-			 */
-			
-			oneOf(mockCardViewFactory).newImageFactory(expectedMaxDim);
-			will(returnValue(mockImageFactory));
-
-			oneOf(mockCardViewFactory).getResource(
-					CardViewFactory.RSRC_BACK_IMAGE);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).getWidth(mockImage);
-			will(returnValue(width));
-			
-			oneOf(mockCardViewFactory).getHeight(mockImage);
-			will(returnValue(height));
-			
-			oneOf(mockCardViewFactory).newDimension2D(width, height);
-			will(returnValue(mockDimension2D));
-
-			/*
-			 * During method under test . . .
-			 */
-			
-			oneOf(mockCardViewFactory).rankString(mockCard);
-			will(returnValue(rankString));
-			
-			oneOf(mockCardViewFactory).suitString(mockCard);
-			will(returnValue(suitString));
-
-			oneOf(mockCardViewFactory).getResource(resourceName);
-			will(returnValue(url));
-		}});
-		
-		CardViewFactory fixture = new CardViewFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getHeight(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getHeight(Image image) {
-				return mockCardViewFactory.getHeight(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getResource(java.lang.String)
-			 */
-			@Override
-			protected String getResource(String resourceName) {
-				return mockCardViewFactory.getResource(resourceName);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getWidth(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getWidth(Image image) {
-				return mockCardViewFactory.getWidth(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newDimension2D(double, double)
-			 */
-			@Override
-			protected Dimension2D newDimension2D(
-					double width, double height) {
-				return mockCardViewFactory.newDimension2D(width, height);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newImageFactory(double)
-			 */
-			@Override
-			protected ImageFactory newImageFactory(double maxDim) {
-				return mockCardViewFactory.newImageFactory(maxDim);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#rankString(io.github.alantcote.playingcards.Card)
-			 */
-			@Override
-			protected String rankString(Card card) {
-				return mockCardViewFactory.rankString(card);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#suitString(io.github.alantcote.playingcards.Card)
-			 */
-			@Override
-			protected String suitString(Card card) {
-				return mockCardViewFactory.suitString(card);
-			}
-		};
-		
-		assertEquals(url, fixture.imageURL(mockCard));
+		assertNotNull(fixture.imageURL(testCard));
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#newCardView(io.github.alantcote.playingcards.Card, javafx.scene.image.Image)}.
+	 */
 	@Test
 	public void testNewCardView() {
-		/*
-		 * This is a wrapper around a constructor, needed to enable mocking. It
-		 * is not tested, here.
-		 */
+		CardViewFactory fixture = new CardViewFactory();
+		Card testCard = new Card(Rank.ACE, Suit.CLUB);
+		Image testImage = fixture.imageFactory.getImage(fixture.imageURL(testCard));
+		
+		assertNotNull(fixture.newCardView(testCard, testImage));
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#newDimension2D(double, double)}.
+	 */
+	@Test
+	public void testNewDimension2D() {
+		CardViewFactory fixture = new CardViewFactory();
+		
+		assertNotNull(fixture.newDimension2D(CardViewFactory.DEFAULT_MAX_DIM, CardViewFactory.DEFAULT_MAX_DIM));
+	}
+
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#newImageFactory(double)}.
+	 */
 	@Test
 	public void testNewImageFactory() {
-		/*
-		 * This is a wrapper around a constructor, needed to enable mocking. It
-		 * is not tested, here.
-		 */
+		CardViewFactory fixture = new CardViewFactory();
+		
+		assertNotNull(fixture.newDimension2D(CardViewFactory.DEFAULT_MAX_DIM, CardViewFactory.DEFAULT_MAX_DIM));
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#rankString(io.github.alantcote.playingcards.Card)}.
+	 */
 	@Test
 	public void testRankString() {
-		final double expectedMaxDim = CardViewFactory.DEFAULT_MAX_DIM;
-		final ImageFactory mockImageFactory =
-				context.mock(ImageFactory.class, "mockImageFactory");
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class, "mockImage");
-		final double width = 3;
-		final double height = 4;
-		final Dimension2D mockDimension2D =
-				context.mock(Dimension2D.class, "mockDimension2D");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		final Card mockCard = context.mock(Card.class, "mockCard");
-		final String expected = "j";
+		CardViewFactory fixture = new CardViewFactory();
+		Card testCard = new Card(Rank.ACE, Suit.CLUB);
 		
-		context.checking(new Expectations() {{
-			/*
-			 * During fixture construction . . .
-			 */
-			
-			oneOf(mockCardViewFactory).newImageFactory(expectedMaxDim);
-			will(returnValue(mockImageFactory));
-
-			oneOf(mockCardViewFactory).getResource(
-					CardViewFactory.RSRC_BACK_IMAGE);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).getWidth(mockImage);
-			will(returnValue(width));
-			
-			oneOf(mockCardViewFactory).getHeight(mockImage);
-			will(returnValue(height));
-			
-			oneOf(mockCardViewFactory).newDimension2D(width, height);
-			will(returnValue(mockDimension2D));
-
-			/*
-			 * During method under test . . .
-			 */
-			
-			oneOf(mockCard).getRank();
-			will(returnValue(Rank.JACK));
-		}});
-		
-		CardViewFactory fixture = new CardViewFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getHeight(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getHeight(Image image) {
-				return mockCardViewFactory.getHeight(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getResource(java.lang.String)
-			 */
-			@Override
-			protected String getResource(String resourceName) {
-				return mockCardViewFactory.getResource(resourceName);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getWidth(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getWidth(Image image) {
-				return mockCardViewFactory.getWidth(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newDimension2D(double, double)
-			 */
-			@Override
-			protected Dimension2D newDimension2D(
-					double width, double height) {
-				return mockCardViewFactory.newDimension2D(width, height);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newImageFactory(double)
-			 */
-			@Override
-			protected ImageFactory newImageFactory(double maxDim) {
-				return mockCardViewFactory.newImageFactory(maxDim);
-			}
-		};
-		
-		assertEquals(expected, fixture.rankString(mockCard));
+		assertNotNull(fixture.rankString(testCard));
 	}
 
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.javafx.CardViewFactory#suitString(io.github.alantcote.playingcards.Card)}.
+	 */
 	@Test
 	public void testSuitString() {
-		final double expectedMaxDim = CardViewFactory.DEFAULT_MAX_DIM;
-		final ImageFactory mockImageFactory =
-				context.mock(ImageFactory.class, "mockImageFactory");
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class, "mockImage");
-		final double width = 3;
-		final double height = 4;
-		final Dimension2D mockDimension2D =
-				context.mock(Dimension2D.class, "mockDimension2D");
-		final CardViewFactory mockCardViewFactory =
-				context.mock(CardViewFactory.class, "mockCardViewFactory");
-		final Card mockCard = context.mock(Card.class, "mockCard");
-		final String expected = "h";
+		CardViewFactory fixture = new CardViewFactory();
+		Card testCard = new Card(Rank.ACE, Suit.CLUB);
 		
-		context.checking(new Expectations() {{
-			/*
-			 * During fixture construction . . .
-			 */
-			
-			oneOf(mockCardViewFactory).newImageFactory(expectedMaxDim);
-			will(returnValue(mockImageFactory));
-
-			oneOf(mockCardViewFactory).getResource(
-					CardViewFactory.RSRC_BACK_IMAGE);
-			will(returnValue(url));
-			
-			oneOf(mockImageFactory).getImage(url);
-			will(returnValue(mockImage));
-			
-			oneOf(mockCardViewFactory).getWidth(mockImage);
-			will(returnValue(width));
-			
-			oneOf(mockCardViewFactory).getHeight(mockImage);
-			will(returnValue(height));
-			
-			oneOf(mockCardViewFactory).newDimension2D(width, height);
-			will(returnValue(mockDimension2D));
-
-			/*
-			 * During method under test . . .
-			 */
-			
-			oneOf(mockCard).getSuit();
-			will(returnValue(Suit.HEART));
-		}});
-		
-		CardViewFactory fixture = new CardViewFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getHeight(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getHeight(Image image) {
-				return mockCardViewFactory.getHeight(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getResource(java.lang.String)
-			 */
-			@Override
-			protected String getResource(String resourceName) {
-				return mockCardViewFactory.getResource(resourceName);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#getWidth(javafx.scene.image.Image)
-			 */
-			@Override
-			protected double getWidth(Image image) {
-				return mockCardViewFactory.getWidth(image);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newDimension2D(double, double)
-			 */
-			@Override
-			protected Dimension2D newDimension2D(
-					double width, double height) {
-				return mockCardViewFactory.newDimension2D(width, height);
-			}
-
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.CardViewFactory#newImageFactory(double)
-			 */
-			@Override
-			protected ImageFactory newImageFactory(double maxDim) {
-				return mockCardViewFactory.newImageFactory(maxDim);
-			}
-		};
-		
-		assertEquals(expected, fixture.suitString(mockCard));
+		assertNotNull(fixture.suitString(testCard));
 	}
+
 }

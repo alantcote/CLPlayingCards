@@ -1,19 +1,22 @@
 package io.github.alantcote.playingcards.demo;
 
 import static org.junit.Assert.*;
-import javafx.scene.paint.Color;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import io.github.alantcote.jfxrunner.JavaFxJUnit4ClassRunner;
+import javafx.scene.paint.Paint;
 
-@RunWith(JavaFxJUnit4ClassRunner.class)
+/**
+ * Test case for {@link io.github.alantcote.playingcards.demo.DeckViewerScene}.
+ */
 public class DeckViewerSceneTest {
+
+	/**
+	 * Test method for {@link io.github.alantcote.playingcards.demo.DeckViewerScene#DeckViewerScene(javafx.scene.paint.Paint)}.
+	 */
 	@Test
 	public void testDeckViewerScene() {
-		DeckViewerScene fixture = new DeckViewerScene(Color.DARKGREEN);
-		
-		assertNotNull(fixture);
+		assertNotNull(new DeckViewerScene(DeckViewer.BACKGROUND_COLOR));
 	}
+
 }

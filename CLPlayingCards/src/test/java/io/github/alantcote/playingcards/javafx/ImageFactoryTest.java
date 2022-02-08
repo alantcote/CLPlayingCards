@@ -1,211 +1,118 @@
 package io.github.alantcote.playingcards.javafx;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import java.util.Hashtable;
 import java.util.Map;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.Sequence;
-import org.jmock.imposters.ByteBuddyClassImposteriser;
-import org.jmock.lib.concurrent.Synchroniser;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import io.github.alantcote.jfxrunner.JavaFxJUnit4ClassRunner;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.Image;
 
-@RunWith(JavaFxJUnit4ClassRunner.class)
 public class ImageFactoryTest {
-	protected Mockery context;
-	protected Sequence sequence;
-	
-	@Before
-	public void runBeforeTests() throws Exception {
-		context = new Mockery() {{
-			setThreadingPolicy( new Synchroniser());
-			setImposteriser( ByteBuddyClassImposteriser.INSTANCE );
-		}};
-		
-		sequence = context.sequence( getClass().getName());
-	}
-	
-	@After
-	public void runAfterTests() throws Exception {
-		context.assertIsSatisfied();
-	}
-	
 	@Test
 	public void testFlush() {
-		@SuppressWarnings("unchecked")
-		final Map<String, Image> mockCache =
-				(Map<String, Image>) context.mock(Map.class);
-		final ImageFactory mockImageFactory = context.mock(ImageFactory.class);
-		
-		context.checking( new Expectations() {{
-			oneOf(mockImageFactory).newMap_String_Image();
-			will(returnValue(mockCache));
-			
-			oneOf(mockCache).clear();
-		}});
-		
-		ImageFactory fixture = new ImageFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.ImageFactory#newMap_String_Image()
-			 */
-			@Override
-			protected Map<String, Image> newMap_String_Image() {
-				return mockImageFactory.newMap_String_Image();
-			}
-		};
-		
+		ImageFactory fixture = new ImageFactory();
+
 		fixture.flush();
+
+		assertTrue(fixture.cache.isEmpty());
 	}
 
 	@Test
 	public void testGetImage() {
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class);
-		@SuppressWarnings("unchecked")
-		final Map<String, Image> mockCache =
-				(Map<String, Image>) context.mock(Map.class);
-		final ImageFactory mockImageFactory = context.mock(ImageFactory.class);
-		
-		context.checking( new Expectations() {{
-			oneOf(mockImageFactory).newMap_String_Image();
-			will(returnValue(mockCache));
-			
-			oneOf(mockCache).get(with(url));
-			will(returnValue((Image) null));
-			
-			oneOf(mockImageFactory).loadImage(with(url));
-			will(returnValue(mockImage));
-			
-			oneOf(mockCache).put(with(url), with(mockImage));
-			
-			oneOf(mockCache).get(with(url));
-			will(returnValue(mockImage));
-		}});
-		
+		SimpleIntegerProperty stateProperty = new SimpleIntegerProperty(0);
 		ImageFactory fixture = new ImageFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.ImageFactory#loadImage(java.lang.String)
-			 */
+
 			@Override
 			protected Image loadImage(String url) {
-				return mockImageFactory.loadImage(url);
+				assertTrue(0 == stateProperty.get());
+				stateProperty.set(1);
+
+				return null;
 			}
 
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.ImageFactory#newMap_String_Image()
-			 */
-			@Override
-			protected Map<String, Image> newMap_String_Image() {
-				return mockImageFactory.newMap_String_Image();
-			}
 		};
-		
-		assertEquals(mockImage, fixture.getImage(url));
-		assertEquals(mockImage, fixture.getImage(url));
+
+		stateProperty.set(0);
+
+		assertNull(fixture.getImage("url"));
+
+		assertTrue(1 == stateProperty.get());
 	}
 
 	@Test
 	public void testImageFactory() {
 		double expectedMaxDim = ImageFactory.DEFAULT_MAX_DIM;
-		@SuppressWarnings("unchecked")
-		final Map<String, Image> mockCache =
-				(Map<String, Image>) context.mock(Map.class);
-		final ImageFactory mockImageFactory = context.mock(ImageFactory.class);
-		
-		context.checking( new Expectations() {{
-			oneOf(mockImageFactory).newMap_String_Image();
-			will(returnValue(mockCache));
-		}});
-		
+		final Map<String, Image> testCache = new Hashtable<String, Image>();
 		ImageFactory fixture = new ImageFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.ImageFactory#newMap_String_Image()
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * io.github.alantcote.playingcards.javafx.ImageFactory#newMap_String_Image()
 			 */
 			@Override
 			protected Map<String, Image> newMap_String_Image() {
-				return mockImageFactory.newMap_String_Image();
+				return testCache;
 			}
 		};
-		
-		assertEquals(mockCache, fixture.cache);
-		assertEquals(expectedMaxDim, fixture.maxDim, Double.MIN_VALUE);
+
+		assertTrue(testCache == fixture.cache);
+		assertTrue(expectedMaxDim == fixture.maxDim);
 	}
 
 	@Test
 	public void testImageFactoryDouble() {
-		double expectedMaxDim = 117.06;
-		@SuppressWarnings("unchecked")
-		final Map<String, Image> mockCache =
-				(Map<String, Image>) context.mock(Map.class);
-		final ImageFactory mockImageFactory = context.mock(ImageFactory.class);
-		
-		context.checking( new Expectations() {{
-			oneOf(mockImageFactory).newMap_String_Image();
-			will(returnValue(mockCache));
-		}});
-		
+		double expectedMaxDim = ImageFactory.DEFAULT_MAX_DIM;
+		final Map<String, Image> testCache = new Hashtable<String, Image>();
 		ImageFactory fixture = new ImageFactory(expectedMaxDim) {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.ImageFactory#newMap_String_Image()
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * io.github.alantcote.playingcards.javafx.ImageFactory#newMap_String_Image()
 			 */
 			@Override
 			protected Map<String, Image> newMap_String_Image() {
-				return mockImageFactory.newMap_String_Image();
+				return testCache;
 			}
 		};
-		
-		assertEquals(mockCache, fixture.cache);
-		assertEquals(expectedMaxDim, fixture.maxDim, Double.MIN_VALUE);
+
+		assertTrue(testCache == fixture.cache);
+		assertTrue(expectedMaxDim == fixture.maxDim);
 	}
 
 	@Test
 	public void testLoadImage() {
-		final String url = "url";
-		final Image mockImage = context.mock(Image.class);
-		@SuppressWarnings("unchecked")
-		final Map<String, Image> mockCache =
-				(Map<String, Image>) context.mock(Map.class);
-		final ImageFactory mockImageFactory = context.mock(ImageFactory.class);
-		
-		context.checking( new Expectations() {{
-			oneOf(mockImageFactory).newMap_String_Image();
-			will(returnValue(mockCache));
-			
-			oneOf(mockImageFactory).newImage(
-					with(url), with(ImageFactory.DEFAULT_MAX_DIM),
-					with(ImageFactory.DEFAULT_MAX_DIM), with(true), with(true));
-			will(returnValue(mockImage));
-		}});
-		
+		SimpleIntegerProperty stateProperty = new SimpleIntegerProperty(0);
+		String testURL = "testURL";
 		ImageFactory fixture = new ImageFactory() {
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.ImageFactory#newImage(java.lang.String, double, double, boolean, boolean)
-			 */
+
 			@Override
-			protected Image newImage(String url, double requestedWidth,
-					double requestedHeight, boolean preserveRatio,
+			protected Image newImage(String url, double requestedWidth, double requestedHeight, boolean preserveRatio,
 					boolean smooth) {
-				return mockImageFactory.newImage(url, requestedWidth,
-						requestedHeight, preserveRatio, smooth);
+				assertTrue(0 == stateProperty.get());
+
+				assertEquals(testURL, url);
+				assertTrue(ImageFactory.DEFAULT_MAX_DIM == requestedWidth);
+				assertTrue(ImageFactory.DEFAULT_MAX_DIM == requestedHeight);
+				assertTrue(preserveRatio);
+				assertTrue(smooth);
+
+				stateProperty.set(1);
+
+				return null;
 			}
 
-			/* (non-Javadoc)
-			 * @see io.github.alantcote.playingcards.javafx.ImageFactory#newMap_String_Image()
-			 */
-			@Override
-			protected Map<String, Image> newMap_String_Image() {
-				return mockImageFactory.newMap_String_Image();
-			}
 		};
-		
-		assertEquals(mockImage, fixture.loadImage(url));
+
+		stateProperty.set(0);
+
+		assertNull(fixture.loadImage(testURL));
+
+		assertTrue(1 == stateProperty.get());
 	}
 
 	@Test
