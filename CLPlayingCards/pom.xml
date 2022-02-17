@@ -5,14 +5,15 @@
 	<artifactId>playingcards</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
+	<description>Classes related to decks of playing cards.</description>
 
 	<name>${project.groupId}:${project.artifactId}</name>
-	<url>https://github.com/alantcote</url>
+	<url>https://github.com/alantcote/CLPlayingCards</url>
 
 	<licenses>
 		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>The MIT License</name>
+			<url>https://github.com/alantcote/CLPlayingCards/blob/master/LICENSE</url>
 		</license>
 	</licenses>
 
@@ -20,7 +21,7 @@
 		<developer>
 			<name>Alan T. Coté</name>
 			<email>alantcote@gmail.com</email>
-			<organization>Cote' Lab</organization>
+			<organization>Coté Lab</organization>
 			<organizationUrl>https://github.com/alantcote</organizationUrl>
 		</developer>
 	</developers>
@@ -28,6 +29,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<openjfx.version>18-ea+10</openjfx.version>
+		<java.version>17</java.version>
 	</properties>
 
 	<distributionManagement>
@@ -40,8 +42,6 @@
 			<url>https://s01.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-
-	<description>Classes related to decks of playing cards.</description>
 
 	<organization>
 		<name>Coté Lab</name>
